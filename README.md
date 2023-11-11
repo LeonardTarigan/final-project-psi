@@ -1,8 +1,5 @@
 # Final Project PSI
 
-Brief description of your project.
-
-## Getting Started
 
 ### Clone the Project
 
@@ -21,7 +18,7 @@ git clone https://github.com/LeonardTarigan/final-project-psi.git
    - bugfix/: for fixing a bug.
    - Follow the guidelines at [Git Branching Name Convention](https://dev.to/couchcamote/git-branching-name-convention-cch).
 
-3. Each commit should follow the format [your-name]: commit-message. For example, [leo]: adding firebase integration.
+3. Each commit should follow the format [your-name]: commit-message. For example, ```[leo]: adding firebase integration```.
 
 4. After you've finished your changes, create a pull request.
 
