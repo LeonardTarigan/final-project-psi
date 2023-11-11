@@ -1,7 +1,8 @@
 # Final Project PSI
 
 
-### Clone the Project
+### Getting Started
+You can see the design [here](https://www.figma.com/file/Coe4bU892CdT8a8NAFF22B/RPL?type=design&mode=design&t=ET85tiHKBdMYc0BN-1).
 
 To clone the project, use the following command:
 
