@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.finalprojectpsi"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.finalprojectpsi"
@@ -71,6 +71,8 @@ dependencies {
 
     implementation("com.google.firebase:firebase-auth-ktx:22.2.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("io.coil-kt:coil-compose:2.4.0")
