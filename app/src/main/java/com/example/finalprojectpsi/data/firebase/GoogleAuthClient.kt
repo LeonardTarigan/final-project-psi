@@ -15,7 +15,7 @@ import com.google.firebase.auth.auth
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
-class GoogleAuthUiClient(
+class GoogleAuthClient(
     private val context: Context,
     private val oneTapClient: SignInClient
 ) {
