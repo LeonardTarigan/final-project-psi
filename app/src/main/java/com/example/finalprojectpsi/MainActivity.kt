@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
+import com.example.finalprojectpsi.ui.screens.chat.ChatScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
 import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Slate950
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     color = Slate950,
 
                 ) {
-                    LoginScreen()
+                    ChatScreen()
                 }
             }
         }
