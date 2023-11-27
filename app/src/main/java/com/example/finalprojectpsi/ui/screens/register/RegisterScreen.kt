@@ -1,4 +1,4 @@
-package com.example.finalprojectpsi.ui.screens.login
+package com.example.finalprojectpsi.ui.screens.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,7 +45,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -64,8 +63,9 @@ import com.example.finalprojectpsi.ui.theme.Yellow400
 import com.example.finalprojectpsi.ui.theme.mainFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavController
 ) {
     val emailInputState = remember {
@@ -106,7 +106,7 @@ fun LoginScreen(
                     )
 
                     Text(
-                        text = "Login to Your Account",
+                        text = "Register New Account",
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight(700),
@@ -190,7 +190,7 @@ fun LoginScreen(
 
                 ) {
                     Text(
-                        text = "Login",
+                        text = "Register",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight(700),
@@ -244,7 +244,7 @@ fun LoginScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Login with Google",
+                            text = "Register with Google",
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight(700),
@@ -254,7 +254,7 @@ fun LoginScreen(
                     }
                     ClickableText(
                         onClick = {
-                            navController.navigate("register")
+                                  navController.navigate("login")
                         },
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(color = White)) {
