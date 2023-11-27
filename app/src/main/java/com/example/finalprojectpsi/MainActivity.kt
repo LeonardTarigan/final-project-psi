@@ -13,7 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
+import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
 import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Slate950
@@ -21,7 +25,7 @@ import com.example.finalprojectpsi.ui.theme.Slate950
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor =  ContextCompat.getColor(this, R.color.indigo_600)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.indigo_600)
         setContent {
             FinalProjectPSITheme {
                 // A surface container using the 'background' color from the theme
@@ -31,8 +35,18 @@ class MainActivity : ComponentActivity() {
                         .background(color = Slate950),
                     color = Slate950,
 
-                ) {
-                    LoginScreen()
+                    ) {
+                    val navController = rememberNavController()
+
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") {
+                            LoginScreen(navController)
+                        }
+
+                        composable("register") {
+                            RegisterScreen(navController)
+                        }
+                    }
                 }
             }
         }
