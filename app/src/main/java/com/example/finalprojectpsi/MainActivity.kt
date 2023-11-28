@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.finalprojectpsi.ui.screens.add_post.AddPostScreen
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
 import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
@@ -38,13 +39,17 @@ class MainActivity : ComponentActivity() {
                     ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login") {
+                    NavHost(navController = navController, startDestination = "add_post") {
                         composable("login") {
                             LoginScreen(navController)
                         }
 
                         composable("register") {
                             RegisterScreen(navController)
+                        }
+
+                        composable("add_post") {
+                            AddPostScreen(navController)
                         }
                     }
                 }
