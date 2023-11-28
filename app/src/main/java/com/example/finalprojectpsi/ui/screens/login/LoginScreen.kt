@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpsi.R
 import com.example.finalprojectpsi.ui.theme.Black
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
@@ -277,4 +278,11 @@ fun LoginScreen(
         }
 
     }
+}
+
+@Preview
+@Composable
+private fun LoginPreview(){
+    val navController = rememberNavController()
+    LoginScreen(navController = navController)
 }

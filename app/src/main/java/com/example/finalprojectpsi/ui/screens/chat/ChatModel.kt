@@ -1,13 +1,52 @@
 package com.example.finalprojectpsi.ui.screens.chat
 
-class ChatModel(){
-    private val messages = listOf(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-        "Duis aute irure dolor in reprehenderit in voluptate velit."
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.finalprojectpsi.data.model.ChatDataModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+class MainViewModel : ViewModel() {
+
+    val conversation: StateFlow<List<ChatDataModel.Message>>
+        get() = _conversation
+    private val _conversation = MutableStateFlow(
+        listOf(ChatDataModel.Message.initConv)
     )
 
-    fun getMessages(): List<String>{
-        return messages
+    private val questions = mutableListOf(
+        "What about yesterday?",
+        "Can you tell me what inside your head?",
+        "Lately, I've been wondering if I can really do anything, do you?",
+        "You know fear is often just an illusion, have you ever experienced it?",
+        "If you were me, what would you do?"
+    )
+
+    fun sendChat(msg: String) {
+
+        val myChat = ChatDataModel.Message(msg, ChatDataModel.Author.me)
+        viewModelScope.launch {
+            _conversation.emit(_conversation.value + myChat)
+
+            delay(1000)
+            _conversation.emit(_conversation.value + getRandomQuestion())
+        }
+    }
+
+    private fun getRandomQuestion(): ChatDataModel.Message {
+        val question = if (questions.isEmpty()) {
+            "no further questions, please leave me alone"
+        } else {
+            questions.random()
+        }
+
+        if (questions.isNotEmpty()) questions.remove(question)
+
+        return ChatDataModel.Message(
+            text = question,
+            author = ChatDataModel.Author.bot
+        )
     }
 }
