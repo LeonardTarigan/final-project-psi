@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.indigo_600)
         setContent {
             FinalProjectPSITheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
@@ -115,7 +114,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("home") {
-                            HomeScreen()
+                            HomeScreen(navController, googleAuthClient)
                         }
 
                         composable("register") {
@@ -123,24 +122,15 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("add_post") {
-                            AddPostScreen(navController)
+                            AddPostScreen(navController, googleAuthClient)
                         }
 
                         composable("edit_profile") {
-                            EditProfileScreen(navController)
+                            EditProfileScreen(navController, googleAuthClient)
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        color = Color.Black
-    )
 }

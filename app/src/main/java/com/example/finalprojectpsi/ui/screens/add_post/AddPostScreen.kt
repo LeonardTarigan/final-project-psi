@@ -56,6 +56,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finalprojectpsi.R
+import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
+import com.example.finalprojectpsi.ui.components.BottomNavigationBar.BottomNavigationBar
 import com.example.finalprojectpsi.ui.components.TopBar.TopBar
 import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Sky500
@@ -70,7 +72,8 @@ import com.example.finalprojectpsi.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPostScreen(
-    navController: NavController
+    navController: NavController,
+    googleAuthClient: GoogleAuthClient
 ) {
     val titleInputState = remember {
         mutableStateOf("")
@@ -92,9 +95,11 @@ fun AddPostScreen(
         modifier = Modifier
             .background(color = Color.Black),
         topBar = {
-            TopBar(title = "Add New Post")
+            TopBar(title = "Add New Post", backRoute = "home", navController)
         },
-
+        bottomBar = {
+            BottomNavigationBar(navController, googleAuthClient )
+        }
         ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),

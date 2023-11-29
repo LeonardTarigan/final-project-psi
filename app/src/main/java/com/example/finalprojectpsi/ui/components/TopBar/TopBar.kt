@@ -18,22 +18,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.finalprojectpsi.ui.theme.Slate900
 import com.example.finalprojectpsi.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String) {
+fun TopBar(title: String, backRoute: String, navController: NavController) {
     TopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Slate900,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         navigationIcon = {
-            IconButton(onClick = { /* do something */ }) {
+            IconButton(onClick = { navController.navigate(backRoute) }) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowLeft,
-
                     contentDescription = "Back Button",
                     modifier = Modifier
                         .size(size = 30.dp)
@@ -51,5 +51,5 @@ fun TopBar(title: String) {
             )
         },
 
-    )
+        )
 }
