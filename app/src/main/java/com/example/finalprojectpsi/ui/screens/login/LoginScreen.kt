@@ -1,5 +1,6 @@
 package com.example.finalprojectpsi.ui.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,12 +31,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finalprojectpsi.R
+import com.example.finalprojectpsi.data.model.LoginState
 import com.example.finalprojectpsi.ui.theme.Black
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
 import com.example.finalprojectpsi.ui.theme.Sky500
@@ -66,13 +70,27 @@ import com.example.finalprojectpsi.ui.theme.mainFontFamily
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    state: LoginState,
+    onLoginClick: () -> Unit
 ) {
     val emailInputState = remember {
         mutableStateOf("")
     }
     val passwordInputState = remember {
         mutableStateOf("")
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = state.loginError) {
+        state.loginError?.let { error ->
+            Toast.makeText(
+                context,
+                error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     FinalProjectPSITheme {
@@ -228,7 +246,7 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = onLoginClick,
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
