@@ -5,6 +5,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -28,7 +29,10 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -54,6 +58,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.finalprojectpsi.R
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
@@ -73,18 +78,18 @@ import com.example.finalprojectpsi.ui.theme.White
 @Composable
 fun AddPostScreen(
     navController: NavController,
-    googleAuthClient: GoogleAuthClient
+    googleAuthClient: GoogleAuthClient,
+    onUploadClicked: () -> Unit,
+    addPostViewModel: AddPostViewModel = viewModel()
 ) {
-    val titleInputState = remember {
-        mutableStateOf("")
-    }
-    val descriptionInputState = remember {
-        mutableStateOf("")
-    }
-    var imageUri = remember { mutableStateOf<Uri?>(null) }
 
+    val input = addPostViewModel.inputData.value
+    val locations = addPostViewModel.locations.value
     val context = LocalContext.current
+
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val expanded = remember { mutableStateOf(false) }
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -98,9 +103,9 @@ fun AddPostScreen(
             TopBar(title = "Add New Post", backRoute = "home", navController)
         },
         bottomBar = {
-            BottomNavigationBar(navController, googleAuthClient )
+            BottomNavigationBar(navController, googleAuthClient)
         }
-        ) { innerPadding ->
+    ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),
             color = Slate950,
@@ -129,8 +134,8 @@ fun AddPostScreen(
                             )
                         )
                         TextField(
-                            value = titleInputState.value,
-                            onValueChange = { titleInputState.value = it },
+                            value = input.title,
+                            onValueChange = { addPostViewModel.setTitle(it) },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -158,8 +163,8 @@ fun AddPostScreen(
                             )
                         )
                         TextField(
-                            value = descriptionInputState.value,
-                            onValueChange = { descriptionInputState.value = it },
+                            value = input.description,
+                            onValueChange = { addPostViewModel.setDescription(it) },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -174,6 +179,47 @@ fun AddPostScreen(
                             ),
                             textStyle = TextStyle(color = White),
                         )
+                    }
+
+                    ExposedDropdownMenuBox(
+                        expanded = expanded.value,
+                        onExpandedChange = {
+                            expanded.value = it
+                        },
+                        modifier = Modifier.padding(top = 20.dp)
+                    ) {
+                        TextField(
+                            value = input.location,
+                            onValueChange = { },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(),
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Slate800,
+                                cursorColor = White,
+                                textColor = White,
+                            ),
+                            readOnly = true,
+                            textStyle = TextStyle(color = White),
+                            placeholder = { Text(text = "Location")}
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false }
+                        ) {
+                            locations.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(text = item) },
+                                    onClick = {
+                                        addPostViewModel.setLocation(item)
+                                        expanded.value = false
+                                    }
+                                )
+                            }
+                        }
                     }
 
                     Button(
@@ -225,8 +271,10 @@ fun AddPostScreen(
                     }
                 }
 
+
+
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = onUploadClicked,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
