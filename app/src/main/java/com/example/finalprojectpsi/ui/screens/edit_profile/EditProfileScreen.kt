@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finalprojectpsi.R
-import com.example.finalprojectpsi.ui.components.ImageUploadButton.ImageUploadButton
 import com.example.finalprojectpsi.ui.components.TopBar.TopBar
 import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Slate500
