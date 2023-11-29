@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finalprojectpsi.R
+import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
+import com.example.finalprojectpsi.ui.components.BottomNavigationBar.BottomNavigationBar
 import com.example.finalprojectpsi.ui.components.TopBar.TopBar
 import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Slate500
@@ -56,7 +58,8 @@ import com.example.finalprojectpsi.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    navController: NavController
+    navController: NavController,
+    googleAuthClient: GoogleAuthClient
 ) {
     val userNameInputState = remember { mutableStateOf("") }
     val nameInputState = remember { mutableStateOf("") }
@@ -73,8 +76,13 @@ fun EditProfileScreen(
         modifier = Modifier
             .background(color = Color.Black),
         topBar = {
-            TopBar(title = "Edit Profile")
+            TopBar(
+                title = "Edit Profile",
+                backRoute = "profile",
+                navController
+            )
         },
+        bottomBar = { BottomNavigationBar(navController, googleAuthClient) }
     ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),
@@ -96,7 +104,7 @@ fun EditProfileScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(bottom = 20.dp)
                     ) {
-                        if (imageUri.value == null)  {
+                        if (imageUri.value == null) {
                             Image(
                                 painter = painterResource(id = R.drawable.app_logo_small),
                                 contentDescription = "Profile Picture",
