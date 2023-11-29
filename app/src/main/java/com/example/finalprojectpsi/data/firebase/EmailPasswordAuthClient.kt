@@ -21,7 +21,8 @@ class EmailPasswordAuthClient(
                     UserData(
                         userId = uid,
                         userName = displayName,
-                        profilePictureUrl = photoUrl?.toString()
+                        profilePictureUrl = photoUrl?.toString(),
+                        name = displayName
                     )
                 },
                 errorMessage = null
@@ -50,7 +51,8 @@ class EmailPasswordAuthClient(
         UserData(
             userId = uid,
             userName = displayName,
-            profilePictureUrl = photoUrl?.toString()
+            profilePictureUrl = photoUrl?.toString(),
+            name = displayName
         )
     }
 }

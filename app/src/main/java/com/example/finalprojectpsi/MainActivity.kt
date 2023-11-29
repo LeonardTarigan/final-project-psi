@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
 import com.example.finalprojectpsi.ui.screens.home.HomeScreen
+import com.example.finalprojectpsi.ui.screens.profile.ProfileScreen
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
 
@@ -123,6 +124,25 @@ class MainActivity : ComponentActivity() {
 
                         composable("add_post") {
                             AddPostScreen(navController, googleAuthClient)
+                        }
+
+                        composable("profile") {
+                            ProfileScreen(
+                                navController,
+                                googleAuthClient,
+                                onLogoutClick = {
+                                    lifecycleScope.launch {
+                                        googleAuthClient.logout()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Signed out",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        navController.navigate("login")
+                                    }
+                                }
+                            )
                         }
 
                         composable("edit_profile") {
