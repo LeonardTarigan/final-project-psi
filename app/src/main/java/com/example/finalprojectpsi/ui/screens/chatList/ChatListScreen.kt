@@ -48,8 +48,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,7 +68,6 @@ import java.util.EventListener
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(model: ChatListData,
-
                    modifier: Modifier){
     Surface(
         color = Slate950,
@@ -104,7 +107,7 @@ fun ChatListScreen(model: ChatListData,
                         end.linkTo(parent.end)
                         height = Dimension.fillToConstraints
                     },
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(5.dp)
             ) {
                 // this emit every object of ChatDataModel that has all messages and Author
                 items(model.listChat) { item ->
@@ -170,9 +173,67 @@ fun SearchBar(modifier: Modifier){
 @Composable
 fun MessageList(chat: ChatDataModel){
     Column(
-        
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
     ) {
-
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 20.dp
+                )
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.dummy_profile_pic),
+                contentDescription = "Profile Pic",
+                modifier = Modifier
+                    .requiredSize(size = 30.dp)
+                    .clip(shape = CircleShape))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        // Nama User
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold)
+                            ) {append(chat.addressee.name)}
+                            withStyle(style = SpanStyle(
+                                color = Color(0xff64748b),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold)) {append(" ")}
+                            withStyle(style = SpanStyle(
+                                color = Color(0xff64748b),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold)) {append("·")}
+                            withStyle(style = SpanStyle(
+                                color = Color(0xff64748b),
+                                // time stamp (need to include it in data class) - current date
+                                fontSize = 12.sp)) {append(" 1 day ago")}})
+                }
+                // teks terakhir yang terkirim
+                Text(
+                    text = chat.messages.last().text,
+                    color = Color(0xff64748b),
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium),
+                    modifier = Modifier
+                        .fillMaxWidth())
+            }
+        }
     }
 }
 
@@ -240,3 +301,10 @@ fun NavBar(modifier: Modifier){
 //    NavBar(Modifier)
 //}
 
+@Preview(showBackground = true)
+@Composable
+private fun MessageListPreview() {
+    // Dummy Data
+    ChatListScreen(model = ChatListData.dummyListChat,
+        modifier = Modifier)
+}

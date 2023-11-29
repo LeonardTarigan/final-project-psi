@@ -18,5 +18,7 @@ data class ChatListData(
             messages = dummyInitConvo_2,
             addressee = ChatDataModel.Author.andy
         )
+
+        val dummyListChat: ChatListData = ChatListData(listChat = listOf(chat1, chat2))
     }
 }
