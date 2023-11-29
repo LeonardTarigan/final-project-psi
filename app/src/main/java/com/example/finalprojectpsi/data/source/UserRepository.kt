@@ -9,17 +9,12 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
-import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
 class UserRepository {
     val db = FirebaseFirestore.getInstance()
     val auth = Firebase.auth
     var profile = UserData()
-    private val storage = Firebase.storage
-    private val storageReference = storage.reference.child("profile_images")
 
     suspend fun getUserData(): UserData {
         auth.currentUser?.run {
@@ -41,18 +36,13 @@ class UserRepository {
         return profile
     }
 
-    suspend fun updateUserData(userData: UserData, imageUri: Uri?) {
+    suspend fun updateUserData(userData: UserData) {
         try {
             val documentReference = db.collection("users").document(userData.userId)
-
-//            if (imageUri != null) {
-//               uploadImage(imageUri)
-//            }
 
             documentReference.update(
                 "userName", userData.userName,
                 "name", userData.name,
-                "profilePictureUrl", userData.profilePictureUrl,
             ).await()
 
         } catch (e: Exception) {
@@ -60,18 +50,18 @@ class UserRepository {
         }
     }
 
-     fun uploadImage(imageUri: Uri) {
-        imageUri.let { uri ->
-            val storageRef = FirebaseStorage.getInstance().reference
-            val userId = auth.currentUser?.uid
-            val imageRef = storageRef.child("images/$userId.jpg")
-            val uploadTask = imageRef.putFile(uri)
-
-            uploadTask.addOnSuccessListener {
-
-            }.addOnFailureListener {
-            }
-
-        }
-    }
+//     fun uploadImage(imageUri: Uri) {
+//        imageUri.let { uri ->
+//            val storageRef = FirebaseStorage.getInstance().reference
+//            val userId = auth.currentUser?.uid
+//            val imageRef = storageRef.child("images/$userId.jpg")
+//            val uploadTask = imageRef.putFile(uri)
+//
+//            uploadTask.addOnSuccessListener {
+//
+//            }.addOnFailureListener {
+//            }
+//
+//        }
+//    }
 }

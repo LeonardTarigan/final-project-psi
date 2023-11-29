@@ -42,32 +42,9 @@ class EditProfileViewModel : ViewModel() {
     }
 
     fun saveChanges() {
-        // Create a UserData object with the updated values
-        val updatedUserData = UserData(
-            userName = userData.value.userName,
-            name = userData.value.name,
-            profilePictureUrl = userData.value.profilePictureUrl
-        )
-
-//        uploadImageToFirebaseStorage()
-
-        updateFirestoreRecord(updatedUserData)
-    }
-
-    private fun updateFirestoreRecord(userData: UserData) {
         viewModelScope.launch {
-            UserRepository().updateUserData(userData, imageUri.value)
+            UserRepository().updateUserData(userData.value)
         }
-    }
-
-    private fun uploadImageToFirebaseStorage() {
-        viewModelScope.launch {
-           if (imageUri.value != null) {
-               UserRepository().uploadImage(imageUri.value!!)
-           }
-        }
-
-
     }
 
 }
