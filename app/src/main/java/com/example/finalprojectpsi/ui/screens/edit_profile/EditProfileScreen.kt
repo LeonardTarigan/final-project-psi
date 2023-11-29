@@ -1,7 +1,12 @@
 package com.example.finalprojectpsi.ui.screens.edit_profile
 
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,12 +16,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,9 +32,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,6 +64,12 @@ fun EditProfileScreen(
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
+    val context = LocalContext.current
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            imageUri.value = uri
+        }
+
     Scaffold(
         modifier = Modifier
             .background(color = Color.Black),
@@ -79,25 +94,69 @@ fun EditProfileScreen(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(bottom = 20.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.app_logo_small),
-                            contentDescription = "image description",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clip(CircleShape),
+                        if (imageUri.value == null)  {
+                            Image(
+                                painter = painterResource(id = R.drawable.app_logo_small),
+                                contentDescription = "Profile Picture",
+                                contentScale = ContentScale.Inside,
+                                modifier = Modifier
+                                    .width(70.dp)
+                                    .height(70.dp)
+                                    .clip(CircleShape),
 
+                                )
+                        }
+
+                        imageUri.value?.let {
+                            if (Build.VERSION.SDK_INT < 28) {
+                                bitmap.value = MediaStore.Images
+                                    .Media.getBitmap(context.contentResolver, it)
+                            } else {
+                                val source = ImageDecoder.createSource(context.contentResolver, it)
+                                bitmap.value = ImageDecoder.decodeBitmap(source)
+                            }
+
+                            bitmap.value?.let { btm ->
+                                Image(
+                                    bitmap = btm.asImageBitmap(),
+                                    contentDescription = "Profile Picture",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .width(70.dp)
+                                        .height(70.dp)
+                                        .clip(CircleShape),
+
+                                    )
+                            }
+                        }
+                        Button(
+                            onClick = { launcher.launch("image/*") },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Slate800
                             )
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.image_icon),
+                                contentDescription = "Image Icon",
+                                modifier = Modifier
+                                    .size(size = 30.dp)
+                                    .padding(end = 5.dp),
+                                tint = White
+                            )
+                            Text(
+                                text = "Upload Image",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            )
+                        }
 
-                        ImageUploadButton(
-                            imageUri = imageUri,
-                            bitmap = bitmap,
-                            context = LocalContext.current,
-                            text = "Upload Image"
-                        )
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(5.dp)
@@ -106,8 +165,8 @@ fun EditProfileScreen(
                             text = "Username",
                             style = TextStyle(
                                 color = Slate500,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
                             )
                         )
                         TextField(
@@ -135,8 +194,8 @@ fun EditProfileScreen(
                             text = "Name",
                             style = TextStyle(
                                 color = Slate500,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
                             )
                         )
                         TextField(
@@ -164,13 +223,13 @@ fun EditProfileScreen(
                             text = "Email",
                             style = TextStyle(
                                 color = Slate500,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
                             )
                         )
                         TextField(
                             value = "hatorii@gmail.com",
-                            onValueChange = {  },
+                            onValueChange = { },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -192,7 +251,9 @@ fun EditProfileScreen(
                 Button(
                     onClick = { /*TODO*/ },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Indigo600
                     )
