@@ -6,20 +6,24 @@ import android.content.IntentSender
 import com.example.finalprojectpsi.R
 import com.example.finalprojectpsi.data.model.LoginResult
 import com.example.finalprojectpsi.data.model.UserData
+import com.example.finalprojectpsi.utils.StringUtils
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
+
 
 class GoogleAuthClient(
     private val context: Context,
     private val oneTapClient: SignInClient
 ) {
     private val auth = Firebase.auth
+    private val db = FirebaseFirestore.getInstance()
 
     suspend fun login(): IntentSender? {
         val result = try {
@@ -49,8 +53,9 @@ class GoogleAuthClient(
     fun getLoggedInUser(): UserData? = auth.currentUser?.run {
         UserData(
             userId = uid,
-            userName = displayName,
-            profilePictureUrl = photoUrl?.toString()
+            userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
+            profilePictureUrl = photoUrl?.toString(),
+            name = displayName
         )
     }
 
@@ -62,12 +67,23 @@ class GoogleAuthClient(
         return try {
             val user = auth.signInWithCredential(googleCredentials).await().user
 
+            user?.run {
+                val userData = UserData(
+                    userId = uid,
+                    userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
+                    profilePictureUrl = photoUrl?.toString(),
+                    name = displayName
+                )
+                db.collection("users").document(uid).set(userData).await()
+            }
+
             LoginResult(
                 data = user?.run {
                     UserData(
                         userId = uid,
-                        userName = displayName,
-                        profilePictureUrl = photoUrl?.toString()
+                        userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
+                        profilePictureUrl = photoUrl?.toString(),
+                        name = displayName
                     )
                 },
                 errorMessage = null
