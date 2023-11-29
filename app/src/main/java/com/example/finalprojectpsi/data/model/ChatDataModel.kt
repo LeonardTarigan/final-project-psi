@@ -16,6 +16,10 @@ data class ChatDataModel(
                 text = "Hi there, how you doing?",
                 author = Author.bot
             )
+            val secConv = Message(
+                text = "ANDY HEREEE!!!",
+                author = Author.andy
+            )
         }
     }
 
@@ -24,6 +28,7 @@ data class ChatDataModel(
         val name: String
     ) {
         companion object {
+            val andy = Author("2", "Andy")
             val bot = Author("1", "Bot")
             val me = Author(MY_ID, "Me")
         }

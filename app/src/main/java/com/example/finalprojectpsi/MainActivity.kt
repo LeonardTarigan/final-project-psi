@@ -21,7 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpsi.data.model.ChatDataModel
 import com.example.finalprojectpsi.ui.screens.chat.ChatScreen
-import com.example.finalprojectpsi.ui.screens.chat.MainViewModel
+import com.example.finalprojectpsi.ui.screens.chat.ChatViewModel
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
 
 import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
@@ -32,7 +32,7 @@ import com.example.finalprojectpsi.ui.theme.Slate950
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: ChatViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

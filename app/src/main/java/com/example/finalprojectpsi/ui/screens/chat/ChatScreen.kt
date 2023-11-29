@@ -185,44 +185,50 @@ private fun ChatInput(
     modifier: Modifier
 ){
     var chatBoxValue by remember { mutableStateOf(TextFieldValue("")) }
-    Row(modifier = modifier.padding(16.dp)) {
-        TextField(
-            value = chatBoxValue,
-            onValueChange = { newText ->
-                chatBoxValue = newText
-            },
-            modifier = Modifier
-                .weight(1f)
-                .padding(4.dp),
-            shape = RoundedCornerShape(24.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            placeholder = {
-                Text(text = "Type something")
-            }
-        )
-        IconButton(
-            onClick = {
-                val msg = chatBoxValue.text
-                if (msg.isBlank()) return@IconButton
-                onSendChatClickListener(chatBoxValue.text)
-                chatBoxValue = TextFieldValue("")
-            },
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(color = Color(0xff0f172a))
-                .align(Alignment.CenterVertically)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Send,
-                contentDescription = "Send",
+    Box(modifier = modifier
+        .background(color = Color(0xff0f172a))
+
+    ){
+        Row(modifier = modifier
+            .padding(16.dp)) {
+            TextField(
+                value = chatBoxValue,
+                onValueChange = { newText ->
+                    chatBoxValue = newText
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
+                    .weight(1f)
+                    .padding(4.dp),
+                shape = RoundedCornerShape(24.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                placeholder = {
+                    Text(text = "Type something")
+                }
             )
+            IconButton(
+                onClick = {
+                    val msg = chatBoxValue.text
+                    if (msg.isBlank()) return@IconButton
+                    onSendChatClickListener(chatBoxValue.text)
+                    chatBoxValue = TextFieldValue("")
+                },
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(color = Color(0xff0f172a))
+                    .align(Alignment.CenterVertically)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Send,
+                    contentDescription = "Send",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
