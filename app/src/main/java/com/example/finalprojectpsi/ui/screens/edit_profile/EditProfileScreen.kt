@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,7 +45,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.finalprojectpsi.R
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
 import com.example.finalprojectpsi.ui.components.BottomNavigationBar.BottomNavigationBar
@@ -59,12 +63,14 @@ import com.example.finalprojectpsi.ui.theme.White
 @Composable
 fun EditProfileScreen(
     navController: NavController,
-    googleAuthClient: GoogleAuthClient
+    googleAuthClient: GoogleAuthClient,
+    editProfileViewModel: EditProfileViewModel = viewModel(),
+    onSaveChangesClick: () -> Unit
 ) {
-    val userNameInputState = remember { mutableStateOf("") }
-    val nameInputState = remember { mutableStateOf("") }
-    val imageUri = remember { mutableStateOf<Uri?>(null) }
-    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    val userData = editProfileViewModel.userData.value
+    val imageUri = editProfileViewModel.imageUri
+    val bitmap = editProfileViewModel.bitmap
 
     val context = LocalContext.current
     val launcher =
@@ -106,15 +112,12 @@ fun EditProfileScreen(
                     ) {
                         if (imageUri.value == null) {
                             Image(
-                                painter = painterResource(id = R.drawable.app_logo_small),
-                                contentDescription = "Profile Picture",
-                                contentScale = ContentScale.Inside,
+                                painter = rememberAsyncImagePainter(userData.profilePictureUrl), contentDescription = null,
                                 modifier = Modifier
-                                    .width(70.dp)
-                                    .height(70.dp)
-                                    .clip(CircleShape),
-
-                                )
+                                    .width(50.dp)
+                                    .aspectRatio(ratio = 1f)
+                                    .clip(CircleShape)
+                            )
                         }
 
                         imageUri.value?.let {
@@ -177,8 +180,8 @@ fun EditProfileScreen(
                             )
                         )
                         TextField(
-                            value = userNameInputState.value,
-                            onValueChange = { userNameInputState.value = it },
+                            value = userData.userName.toString(),
+                            onValueChange = { editProfileViewModel.setUserName(it) },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -206,8 +209,8 @@ fun EditProfileScreen(
                             )
                         )
                         TextField(
-                            value = nameInputState.value,
-                            onValueChange = { nameInputState.value = it },
+                            value = userData.name.toString(),
+                            onValueChange = { editProfileViewModel.setName(it) },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -235,7 +238,7 @@ fun EditProfileScreen(
                             )
                         )
                         TextField(
-                            value = "hatorii@gmail.com",
+                            value = userData.email.toString(),
                             onValueChange = { },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
@@ -256,7 +259,7 @@ fun EditProfileScreen(
                 }
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = onSaveChangesClick,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
