@@ -33,6 +33,7 @@ import com.example.finalprojectpsi.ui.theme.Slate950
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
+import com.example.finalprojectpsi.ui.screens.edit_profile.EditProfileViewModel
 import com.example.finalprojectpsi.ui.screens.home.HomeScreen
 import com.example.finalprojectpsi.ui.screens.profile.ProfileScreen
 import com.google.android.gms.auth.api.identity.Identity
@@ -135,7 +136,7 @@ class MainActivity : ComponentActivity() {
                                         googleAuthClient.logout()
                                         Toast.makeText(
                                             applicationContext,
-                                            "Signed out",
+                                            "Signed Out",
                                             Toast.LENGTH_LONG
                                         ).show()
 
@@ -146,7 +147,21 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("edit_profile") {
-                            EditProfileScreen(navController, googleAuthClient)
+                            val viewModel = viewModel<EditProfileViewModel>()
+
+                            EditProfileScreen(navController, googleAuthClient,
+                                onSaveChangesClick = {
+                                    lifecycleScope.launch {
+                                        viewModel.saveChanges()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Profile Changed Successfully",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        navController.navigate("profile")
+                                    }
+                                })
                         }
                     }
                 }

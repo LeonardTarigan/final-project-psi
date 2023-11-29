@@ -55,7 +55,8 @@ class GoogleAuthClient(
             userId = uid,
             userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
             profilePictureUrl = photoUrl?.toString(),
-            name = displayName
+            name = displayName,
+            email = email
         )
     }
 
@@ -68,13 +69,18 @@ class GoogleAuthClient(
             val user = auth.signInWithCredential(googleCredentials).await().user
 
             user?.run {
-                val userData = UserData(
-                    userId = uid,
-                    userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
-                    profilePictureUrl = photoUrl?.toString(),
-                    name = displayName
-                )
-                db.collection("users").document(uid).set(userData).await()
+                val userExists = db.collection("users").document(uid).get().await().exists()
+
+                if (!userExists) {
+                    val userData = UserData(
+                        userId = uid,
+                        userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
+                        profilePictureUrl = photoUrl?.toString(),
+                        name = displayName,
+                        email = email
+                    )
+                    db.collection("users").document(uid).set(userData).await()
+                }
             }
 
             LoginResult(
@@ -83,7 +89,8 @@ class GoogleAuthClient(
                         userId = uid,
                         userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
                         profilePictureUrl = photoUrl?.toString(),
-                        name = displayName
+                        name = displayName,
+                        email = email
                     )
                 },
                 errorMessage = null
