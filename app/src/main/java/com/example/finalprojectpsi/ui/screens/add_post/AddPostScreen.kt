@@ -12,12 +12,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -39,8 +44,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -81,27 +88,6 @@ fun AddPostScreen(
             imageUri.value = uri
         }
 
-    imageUri.value?.let {
-        if (Build.VERSION.SDK_INT < 28) {
-            bitmap.value = MediaStore.Images
-                .Media.getBitmap(context.contentResolver, it)
-        } else {
-            val source = ImageDecoder.createSource(context.contentResolver, it)
-            bitmap.value = ImageDecoder.decodeBitmap(source)
-        }
-
-        bitmap.value?.let { btm ->
-            Image(
-                bitmap = btm.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(400.dp)
-                    .padding(20.dp)
-            )
-        }
-    }
-
-
     Scaffold(
         modifier = Modifier
             .background(color = Color.Black),
@@ -117,8 +103,9 @@ fun AddPostScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 10.dp),
-                verticalArrangement = Arrangement.SpaceBetween
+                    .padding(bottom = 10.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -132,8 +119,8 @@ fun AddPostScreen(
                             text = "Title",
                             style = TextStyle(
                                 color = Slate500,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
                             )
                         )
                         TextField(
@@ -161,8 +148,8 @@ fun AddPostScreen(
                             text = "Description",
                             style = TextStyle(
                                 color = Slate500,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
                             )
                         )
                         TextField(
@@ -192,12 +179,11 @@ fun AddPostScreen(
                         )
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.image_icon) ,
+                            painter = painterResource(id = R.drawable.image_icon),
                             contentDescription = "Image Icon",
                             modifier = Modifier
                                 .size(size = 30.dp)
-                                .padding(end = 5.dp)
-                            ,
+                                .padding(end = 5.dp),
                             tint = White
                         )
                         Text(
@@ -209,12 +195,37 @@ fun AddPostScreen(
                             )
                         )
                     }
+
+                    imageUri.value?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap.value = MediaStore.Images
+                                .Media.getBitmap(context.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                        }
+
+                        bitmap.value?.let { btm ->
+                            Image(
+                                bitmap = btm.asImageBitmap(),
+                                contentDescription = "Profile Picture",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(size = 10.dp))
+                                    .fillMaxWidth()
+                                    .aspectRatio(ratio = 1f),
+
+                                )
+                        }
+                    }
                 }
 
                 Button(
                     onClick = { /*TODO*/ },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Indigo600
                     )
