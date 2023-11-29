@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -198,7 +199,9 @@ private fun ChatInput(
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(4.dp),
+                    .padding(4.dp)
+                    .height(50.dp)
+                    .background(Color(0xff1e293b)),
                 shape = RoundedCornerShape(24.dp),
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
@@ -218,7 +221,7 @@ private fun ChatInput(
                 },
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(color = Color(0xff0f172a))
+                    .background(color = Color.White)
                     .align(Alignment.CenterVertically)
             ) {
                 Icon(
@@ -261,7 +264,8 @@ private fun ChatProfile(
             // PUT THE profilePictureUrl HERE
             Image(
                 painter = painterResource(id = R.drawable.dummy_profile_pic),
-                contentDescription = "Ellipse 3"
+                contentDescription = "Profile Pic",
+                modifier = Modifier.size(50.dp)
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top)

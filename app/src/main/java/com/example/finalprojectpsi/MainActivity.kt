@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(navController)
                         }
 
-                        composable("chatID") {
+                        composable("chatId") {
                             // This is still dummy data
                             ChatScreen(
                                 model = ChatDataModel(
