@@ -166,11 +166,15 @@ fun SearchBar(modifier: Modifier){
     }
 }
 
+
 @Composable
 fun MessageList(chat: ChatDataModel){
+    Column(
+        
+    ) {
 
+    }
 }
-
 
 
 @Composable
@@ -178,11 +182,11 @@ fun NavBar(modifier: Modifier){
     Divider(color = Color.White, thickness = 1.dp)
     Box(
         modifier = modifier
-        .background(color = Color(0xff020617))
-        .padding(
-            horizontal = 20.dp,
-            vertical = 15.dp
-        )
+            .background(color = Color(0xff020617))
+            .padding(
+                horizontal = 20.dp,
+                vertical = 15.dp
+            )
     ){
         Row (
             horizontalArrangement = Arrangement.spacedBy(105.dp, Alignment.Start),
@@ -224,15 +228,15 @@ fun NavBar(modifier: Modifier){
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun SearchBarPreview() {
-    SearchBar(Modifier)
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun NavBarPreview() {
-    NavBar(Modifier)
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun SearchBarPreview() {
+//    SearchBar(Modifier)
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//private fun NavBarPreview() {
+//    NavBar(Modifier)
+//}
 
