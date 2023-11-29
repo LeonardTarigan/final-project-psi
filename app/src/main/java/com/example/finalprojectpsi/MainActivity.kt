@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpsi.ui.screens.add_post.AddPostScreen
+import com.example.finalprojectpsi.ui.screens.edit_profile.EditProfileScreen
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
 import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "add_post") {
+                    NavHost(navController = navController, startDestination = "edit_profile") {
                         composable("login") {
                             LoginScreen(navController)
                         }
@@ -50,6 +51,10 @@ class MainActivity : ComponentActivity() {
 
                         composable("add_post") {
                             AddPostScreen(navController)
+                        }
+
+                        composable("edit_profile") {
+                            EditProfileScreen(navController)
                         }
                     }
                 }
