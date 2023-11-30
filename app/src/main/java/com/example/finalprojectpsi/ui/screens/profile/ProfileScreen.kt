@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -42,6 +46,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.finalprojectpsi.R
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
+import com.example.finalprojectpsi.data.model.PostData
+import com.example.finalprojectpsi.data.model.UserData
 import com.example.finalprojectpsi.ui.components.BottomNavigationBar.BottomNavigationBar
 import com.example.finalprojectpsi.ui.components.TopBar.TopBar
 import com.example.finalprojectpsi.ui.theme.Indigo600
@@ -51,6 +57,7 @@ import com.example.finalprojectpsi.ui.theme.Slate800
 import com.example.finalprojectpsi.ui.theme.Slate900
 import com.example.finalprojectpsi.ui.theme.Slate950
 import com.example.finalprojectpsi.ui.theme.White
+import com.example.finalprojectpsi.utils.DateUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,10 +67,9 @@ fun ProfileScreen(
     onLogoutClick: () -> Unit,
     profileViewModel: ProfileViewModel = viewModel()
 ) {
-    val name = googleAuthClient.getLoggedInUser()?.name ?: ""
-    val userName = googleAuthClient.getLoggedInUser()?.userName ?: ""
 
-    val profileData = profileViewModel.state.value
+    val profileData = profileViewModel.userData.value
+    val postData = profileViewModel.userPosts.value
 
     Scaffold(
         modifier = Modifier
@@ -96,7 +102,7 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 10.dp, vertical = 30.dp),
+                    .padding(horizontal = 10.dp, vertical = 30.dp)
             ) {
 
                 Row(
@@ -184,9 +190,86 @@ fun ProfileScreen(
                         )
                     }
                 }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(50.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
 
+                ) {
+                        items(postData) { post ->
+                            PostItem(post, profileData)
+                        }
+                }
             }
         }
 
+    }
+}
+
+@Composable
+fun PostItem(post: PostData, profileData: UserData) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(profileData.profilePictureUrl), contentDescription = null,
+            modifier = Modifier
+                .width(40.dp)
+                .aspectRatio(ratio = 1f)
+                .clip(CircleShape)
+        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Column{
+                Text(
+                    text = post.title,
+                    style = TextStyle(
+                        color = White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Text(
+                        text = DateUtils.formatDateRelative(post.timeStamp),
+                        style = TextStyle(
+                            color = Slate500,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    )
+                    Text(
+                        text = "·",
+                        style = TextStyle(
+                            color = Slate500,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    )
+                    Text(
+                        text = post.location,
+                        style = TextStyle(
+                            color = Slate500,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    )
+                }
+            }
+            Text(
+                text = post.description,
+                style = TextStyle(
+                    color = White,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp
+                )
+            )
+
+        }
     }
 }

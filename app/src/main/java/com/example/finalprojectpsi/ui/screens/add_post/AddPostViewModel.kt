@@ -1,14 +1,10 @@
 package com.example.finalprojectpsi.ui.screens.add_post
 
-import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalprojectpsi.data.model.PostData
 import com.example.finalprojectpsi.data.source.PostRepository
-import com.example.finalprojectpsi.data.source.UserRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,7 +22,17 @@ class AddPostViewModel: ViewModel() {
         getLocations()
 
         auth.currentUser?.run {
-            inputData.value = inputData.value.copy(ownerUid = uid)
+            viewModelScope.launch {
+                try {
+                    val userDoc = db.collection("users").document(uid).get().await()
+                    val userName = userDoc.getString("userName")
+                    val profilePictureUrl = userDoc.getString("profilePictureUrl")
+
+                    inputData.value = inputData.value.copy(ownerUid = uid, ownerUserName = userName!!, ownerProfilePictureUrl = profilePictureUrl!!)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
 
@@ -51,6 +57,8 @@ class AddPostViewModel: ViewModel() {
     suspend fun addNewPost() {
         val postData = inputData.value
 
+
+
         if (postData.title.isBlank() || postData.description.isBlank()) {
             throw IllegalArgumentException("Title or Description cannot be blank")
         }
@@ -60,7 +68,9 @@ class AddPostViewModel: ViewModel() {
                 .add(postData)
                 .await()
 
-            inputData.value = PostData()
+            setTitle("")
+            setDescription("")
+            setLocation("")
         } catch (e: Exception) {
             e.printStackTrace()
         }

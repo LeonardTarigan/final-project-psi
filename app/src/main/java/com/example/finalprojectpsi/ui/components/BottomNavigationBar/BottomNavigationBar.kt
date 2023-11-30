@@ -1,7 +1,12 @@
 package com.example.finalprojectpsi.ui.components.BottomNavigationBar
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -13,6 +18,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -27,12 +33,14 @@ fun BottomNavigationBar(
 
     NavigationBar(
         containerColor = Slate900,
+
     ) {
-        NavigationBarItem(selected = false, onClick = { navController.navigate("home") }, icon = {
+        NavigationBarItem(
+            selected = false,
+            onClick = { navController.navigate("home") }, icon = {
             Icon(
                 imageVector = Icons.Filled.Home,
                 contentDescription = null,
-
                 modifier = Modifier
                     .width(30.dp)
                     .aspectRatio(ratio = 1f),
