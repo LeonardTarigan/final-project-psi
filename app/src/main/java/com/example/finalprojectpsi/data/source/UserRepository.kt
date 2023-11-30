@@ -43,25 +43,11 @@ class UserRepository {
             documentReference.update(
                 "userName", userData.userName,
                 "name", userData.name,
+                "phoneNumber", userData.phoneNumber
             ).await()
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
-//     fun uploadImage(imageUri: Uri) {
-//        imageUri.let { uri ->
-//            val storageRef = FirebaseStorage.getInstance().reference
-//            val userId = auth.currentUser?.uid
-//            val imageRef = storageRef.child("images/$userId.jpg")
-//            val uploadTask = imageRef.putFile(uri)
-//
-//            uploadTask.addOnSuccessListener {
-//
-//            }.addOnFailureListener {
-//            }
-//
-//        }
-//    }
 }

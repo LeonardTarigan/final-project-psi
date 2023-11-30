@@ -56,7 +56,8 @@ class GoogleAuthClient(
             userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
             profilePictureUrl = photoUrl?.toString(),
             name = displayName,
-            email = email
+            email = email,
+            phoneNumber = phoneNumber
         )
     }
 
@@ -77,7 +78,8 @@ class GoogleAuthClient(
                         userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
                         profilePictureUrl = photoUrl?.toString(),
                         name = displayName,
-                        email = email
+                        email = email,
+                        phoneNumber = phoneNumber
                     )
                     db.collection("users").document(uid).set(userData).await()
                 }
@@ -90,7 +92,8 @@ class GoogleAuthClient(
                         userName = StringUtils.joinArrayWithFourDigitRandom(displayName ?: ""),
                         profilePictureUrl = photoUrl?.toString(),
                         name = displayName,
-                        email = email
+                        email = email,
+                        phoneNumber = phoneNumber
 
                     )
                 },

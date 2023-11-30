@@ -160,7 +160,7 @@ fun EditProfileScreen(
                             Text(
                                 text = "Upload Image",
                                 style = TextStyle(
-                                    fontSize = 16.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
                                 )
@@ -211,6 +211,36 @@ fun EditProfileScreen(
                         TextField(
                             value = userData.name.toString(),
                             onValueChange = { editProfileViewModel.setName(it) },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Slate800,
+                                cursorColor = White,
+                                textColor = White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            textStyle = TextStyle(color = White),
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Text(
+                            text = "Phone Number",
+                            style = TextStyle(
+                                color = Slate500,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
+                            )
+                        )
+
+                        TextField(
+                            value = userData.phoneNumber?.toString() ?: "",
+                            onValueChange = { editProfileViewModel.setPhoneNumber(it) },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()

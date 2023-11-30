@@ -1,10 +1,14 @@
 package com.example.finalprojectpsi.ui.screens.home
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,10 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,6 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +53,7 @@ import com.example.finalprojectpsi.data.model.PostData
 import com.example.finalprojectpsi.data.model.UserData
 import com.example.finalprojectpsi.ui.components.BottomNavigationBar.BottomNavigationBar
 import com.example.finalprojectpsi.ui.screens.profile.PostItem
+import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Sky500
 import com.example.finalprojectpsi.ui.theme.Slate500
 import com.example.finalprojectpsi.ui.theme.Slate800
@@ -61,6 +73,8 @@ fun HomeScreen(
     val locationInput = homeViewModel.locationInput.value
     val locations = homeViewModel.locations.value
     val allPosts = homeViewModel.posts.value
+
+    val context = LocalContext.current
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController, googleAuthClient) }
@@ -130,7 +144,7 @@ fun HomeScreen(
                         .padding(top = 30.dp)
                 ) {
                     items(allPosts) { post ->
-                        HomePostCard(post)
+                        HomePostCard(post, context)
                     }
                 }
             }
@@ -140,7 +154,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomePostCard(post: PostData) {
+fun HomePostCard(post: PostData, context: Context) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
 
@@ -208,7 +222,43 @@ fun HomePostCard(post: PostData) {
                     fontSize = 16.sp
                 )
             )
+            Button(
+                onClick = {
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(
+                                java.lang.String.format(
+                                    "https://api.whatsapp.com/send?phone=%s",
+                                    post.ownerPhoneNumber,
+                                )
+                            )
+                        )
+                    )
 
+                },
+                modifier = Modifier
+                    .defaultMinSize(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Slate800
+                ),
+                shape = RoundedCornerShape(10.dp),
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.message_icon),
+                    contentDescription = null,
+                    tint = White,
+                    modifier = Modifier.padding(end = 5.dp)
+                )
+                Text(
+                    text = "Chat",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+            }
         }
     }
 }

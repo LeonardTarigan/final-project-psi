@@ -21,7 +21,6 @@ import com.example.finalprojectpsi.ui.screens.add_post.AddPostScreen
 import com.example.finalprojectpsi.ui.screens.edit_profile.EditProfileScreen
 import com.example.finalprojectpsi.ui.screens.login.LoginScreen
 import com.example.finalprojectpsi.ui.screens.login.LoginViewModel
-import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
 import com.example.finalprojectpsi.ui.theme.Slate950
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -86,7 +85,7 @@ class MainActivity : ComponentActivity() {
                                 if (state.value.isLoginSuccessful) {
                                     Toast.makeText(
                                         applicationContext,
-                                        "Login successful",
+                                        "Signed-in successfully",
                                         Toast.LENGTH_LONG
                                     ).show()
 
@@ -113,10 +112,6 @@ class MainActivity : ComponentActivity() {
 
                         composable("home") {
                             HomeScreen(navController, googleAuthClient)
-                        }
-
-                        composable("register") {
-                            RegisterScreen(navController)
                         }
 
                         composable("add_post") {

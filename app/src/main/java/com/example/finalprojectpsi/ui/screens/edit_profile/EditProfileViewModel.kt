@@ -35,6 +35,10 @@ class EditProfileViewModel : ViewModel() {
         userData.value = userData.value.copy(name = name)
     }
 
+    fun setPhoneNumber(phoneNumber: String) {
+        userData.value = userData.value.copy(phoneNumber = phoneNumber)
+    }
+
     private fun getData() {
         viewModelScope.launch {
             userData.value = UserRepository().getUserData()
