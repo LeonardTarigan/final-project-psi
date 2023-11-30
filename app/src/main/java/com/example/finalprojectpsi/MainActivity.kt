@@ -9,14 +9,9 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -28,16 +23,17 @@ import com.example.finalprojectpsi.ui.screens.login.LoginScreen
 import com.example.finalprojectpsi.ui.screens.login.LoginViewModel
 import com.example.finalprojectpsi.ui.screens.register.RegisterScreen
 import com.example.finalprojectpsi.ui.theme.FinalProjectPSITheme
-import com.example.finalprojectpsi.ui.theme.Indigo600
 import com.example.finalprojectpsi.ui.theme.Slate950
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.finalprojectpsi.data.firebase.GoogleAuthClient
+import com.example.finalprojectpsi.ui.screens.add_post.AddPostViewModel
 import com.example.finalprojectpsi.ui.screens.edit_profile.EditProfileViewModel
 import com.example.finalprojectpsi.ui.screens.home.HomeScreen
 import com.example.finalprojectpsi.ui.screens.profile.ProfileScreen
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 class MainActivity : ComponentActivity() {
     private val googleAuthClient by lazy {
@@ -124,7 +120,30 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("add_post") {
-                            AddPostScreen(navController, googleAuthClient)
+                            val viewModel = viewModel<AddPostViewModel>()
+
+                            AddPostScreen(
+                                navController,
+                                googleAuthClient,
+                                onUploadClicked = {
+                                    lifecycleScope.launch {
+                                        try {
+                                            viewModel.addNewPost()
+                                            Toast.makeText(
+                                                applicationContext,
+                                                "Post Added",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        } catch (e: IllegalArgumentException) {
+                                            Toast.makeText(
+                                                applicationContext,
+                                                e.message.toString(),
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                }
+                            )
                         }
 
                         composable("profile") {
@@ -149,7 +168,9 @@ class MainActivity : ComponentActivity() {
                         composable("edit_profile") {
                             val viewModel = viewModel<EditProfileViewModel>()
 
-                            EditProfileScreen(navController, googleAuthClient,
+                            EditProfileScreen(
+                                navController,
+                                googleAuthClient,
                                 onSaveChangesClick = {
                                     lifecycleScope.launch {
                                         viewModel.saveChanges()
@@ -161,7 +182,8 @@ class MainActivity : ComponentActivity() {
 
                                         navController.navigate("profile")
                                     }
-                                })
+                                }
+                            )
                         }
                     }
                 }

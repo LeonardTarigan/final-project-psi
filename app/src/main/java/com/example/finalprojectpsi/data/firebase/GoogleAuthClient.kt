@@ -91,6 +91,7 @@ class GoogleAuthClient(
                         profilePictureUrl = photoUrl?.toString(),
                         name = displayName,
                         email = email
+
                     )
                 },
                 errorMessage = null
