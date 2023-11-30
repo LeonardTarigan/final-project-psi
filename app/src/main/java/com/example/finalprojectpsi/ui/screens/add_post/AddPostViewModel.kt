@@ -48,6 +48,10 @@ class AddPostViewModel: ViewModel() {
         inputData.value = inputData.value.copy(location = location)
     }
 
+    fun setOwnerPhoneNumber(phoneNumber: String) {
+        inputData.value = inputData.value.copy(ownerPhoneNumber = phoneNumber)
+    }
+
     private fun getLocations() {
         viewModelScope.launch {
             locations.value = PostRepository().getAllLocations()
@@ -57,10 +61,8 @@ class AddPostViewModel: ViewModel() {
     suspend fun addNewPost() {
         val postData = inputData.value
 
-
-
-        if (postData.title.isBlank() || postData.description.isBlank()) {
-            throw IllegalArgumentException("Title or Description cannot be blank")
+        if (postData.title.isBlank() || postData.description.isBlank() || postData.ownerPhoneNumber.isBlank()) {
+            throw IllegalArgumentException("Please Fill In All Fields!")
         }
 
         try {
@@ -71,6 +73,7 @@ class AddPostViewModel: ViewModel() {
             setTitle("")
             setDescription("")
             setLocation("")
+            setOwnerPhoneNumber("")
         } catch (e: Exception) {
             e.printStackTrace()
         }

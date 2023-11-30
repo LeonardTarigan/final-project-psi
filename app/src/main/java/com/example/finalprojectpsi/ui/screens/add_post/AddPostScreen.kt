@@ -126,6 +126,35 @@ fun AddPostScreen(
                         verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         Text(
+                            text = "Phone Number (628xx)",
+                            style = TextStyle(
+                                color = Slate500,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
+                            )
+                        )
+                        TextField(
+                            value = input.ownerPhoneNumber,
+                            onValueChange = { addPostViewModel.setOwnerPhoneNumber(it) },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Slate800,
+                                cursorColor = White,
+                                textColor = White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            textStyle = TextStyle(color = White),
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Text(
                             text = "Title",
                             style = TextStyle(
                                 color = Slate500,

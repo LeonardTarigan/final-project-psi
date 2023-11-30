@@ -124,7 +124,7 @@ fun LoginScreen(
                     )
 
                     Text(
-                        text = "Login to Your Account",
+                        text = "Sign-in to Your Account",
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight(700),
@@ -208,7 +208,7 @@ fun LoginScreen(
 
                 ) {
                     Text(
-                        text = "Login",
+                        text = "Sign-in",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight(700),
@@ -241,54 +241,29 @@ fun LoginScreen(
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Button(
+                    onClick = onLoginClick,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = White
+                    )
                 ) {
-                    Button(
-                        onClick = onLoginClick,
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = White
+                    Image(
+                        painter = painterResource(id = R.drawable.google_logo),
+                        contentDescription = "App Logo",
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Sign-in with Google",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(700),
+                            color = Black
                         )
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google_logo),
-                            contentDescription = "App Logo",
-                            modifier = Modifier
-                                .width(25.dp)
-                                .height(25.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Login with Google",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight(700),
-                                color = Black
-                            )
-                        )
-                    }
-                    ClickableText(
-                        onClick = {
-                            navController.navigate("register")
-                        },
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = White)) {
-                                append("Don’t have an account? ")
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    color = Sky500,
-                                    textDecoration = TextDecoration.Underline,
-                                    fontWeight = FontWeight(700)
-                                )
-                            ) {
-                                append("Register")
-                                addStringAnnotation("clickable", "Register", 0, length)
-                            }
-                        }
                     )
                 }
             }

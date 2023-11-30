@@ -10,6 +10,7 @@ data class PostData(
     val description: String = "",
     val ownerUid: String = "",
     val ownerUserName: String = "",
+    val ownerPhoneNumber: String = "",
     val ownerProfilePictureUrl: String = "",
     val isResolved: Boolean = false,
     val location: String = "",
